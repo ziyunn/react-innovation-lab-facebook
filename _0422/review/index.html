@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var addNumbersA = new Function('num1', 'num2', 'return num1 + num2');
+        console.log(addNumbersA(2,2));
+
+        //리터럴 방식, 더 많이 사용
+        var addNumbersB = function(num1, num2) {
+            return num1 + num2;
+        };
+        console.log(addNumbersB(3,2));
+
+        //함수는 변수, 배열, 객체에 저장될 수 있다.
+        var funA = function(){};
+        var funB = [function(){}];
+        var funC = {method: function(){}};
+
+        //함수는 함수로 전달할 수도, 함수에서 반환될 수도 있따.
+        var funcD = function(func){
+            return func;
+        };
+       
+       var runFuncPassedToFuncD = funcD(function(){console.log('Hi');});
+
+       runFuncPassedToFuncD();
+
+        //함수는 객체다. 즉 속성을 가진다.
+        var funcE = function(){};
+        funcE.answer = 'yup';
+        console.log(funcE.answer);
+
+        //다음에서 우리는 addFunction() 함수를 호출하며 두개의 인수를 전달했다. 전달된 두 값은 함수 스코프에 새로운 값으로서 추가된다. 
+
+        var addFunction = function(number1, number2) {
+            var sum = number1 + number2;
+            return sum;
+        }
+        console.log(addFunction(3,3));
+
+
+        var myObject1 = {
+            name : 'myObject1',
+            myMethod : function(){console.log(this);}
+        };
+        myObject1.myMethod();
+
+        var myObject2 = function(){console.log(this);};
+        myObject2();
+
+        //함수 생성자 : 마지막 매개변수는 함수의 로직(몸체 코드)부분이며, 그 외의 매개변수는 인수다. 
+        var addConstructor = new Function('x','y','return x+y');
+
+        //함수 선언문
+        function addStatement(x,y){
+            return x + y;
+        }
+        //함수 표현식
+        var addExpression = function(x,y){
+            return x + y;
+        };
+
+
+        //호출하는 네가지 패턴 
+        //1. 함수 패턴
+        var myFunction = function(){return 'foo'};
+        console.log(myFunction());
+        //2. 메소드 패턴
+        var myObject = {myFunction : function(){return 'bar';}}
+        console.log(myObject.myFunction());
+        //3. 생성자 패턴 
+        var Cody = function() {
+            this.living = true;
+            this.age = 33;
+            this.gender = 'male';
+            this.getGender = function() {return this.gender;};
+        }
+        var cody = new Cody();
+        console.log(cody);
+        //4. apply()와 call() 패턴
+        var greet = {
+            runGreet : function(){
+                console.log(this.name,arguments[0],arguments[1]);
+            }
+        }
+        var cody = {name : 'cody'};
+        var lisa = {name : 'lisa'};
+
+        greet.runGreet.call(cody,'foo','bar');
+        greet.runGreet.call(lisa,['foo','bar']);
+
+    </script>
+</body>
+</html>
