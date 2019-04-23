@@ -1,0 +1,16 @@
+<html>
+    <body>
+        <a href="1.html" onclick="handler(event);">dont't move</a>
+        <input type="button" value="hi" onclick="handler(event);">
+        <input type="text" onchange="handler(event);">
+        <script>
+            function handler(e){
+                if(e.target.tagName === 'A'){
+                    e.preventDefault();
+                }
+                console.log(e, e.target, e.type);
+            }
+            // debugger;
+        </script>
+    </body>
+</html>
