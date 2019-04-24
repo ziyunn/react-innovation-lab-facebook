@@ -18,24 +18,48 @@
                 ${sub}
             </header>`
         }
-        var navTag = `
+        function navTag(data){ 
+            var liTag ='';
+            var i = 0;
+            while(i < data.length){
+                liTag = liTag + `
+                    <li>
+                        <a href="${data[i].id}.html" 
+                           onclick="
+                                mode='read'; 
+                                selected_id = ${data[i].id}; 
+                                render(); 
+                                event.preventDefault();">${data[i].title}
+                        </a>
+                    </li>`;
+                i = i + 1;
+            }  
+
+            return `
             <nav>
                 <ol>
-                    <li><a href="1.html" onclick="mode='read'; render(); event.preventDefault();">HTML</a></li>
-                    <li><a href="2.html">CSS</a></li>
-                    <li><a href="3.html">JavaScript</a></li>
+                    ${liTag}
                 </ol>
-            </nav>`;
-
-        function articleTag(title, dec){
+            </nav>`
+        }
+        function articleTag(title, desc){
             return `
             <article>
                 <h2>${title}</h2>
-                ${dec}
-            </article>`
+                ${desc}
+            </article>`;
         }
         
-        var mode = 'welcome'
+        var mode = 'read'
+
+        var contents = [
+            {id:1, title:'HTML', desc:'HTML is...'},
+            {id:2, title:'css', desc:'css is...'},
+            {id:3, title:'javascript', desc:'javascript is...'}
+        ];
+
+        var selected_id = 1;
+
         function render(){
             var _articleTitle ='';
             var _articleDecs ='';
@@ -44,14 +68,24 @@
                 _articleTitle = "Welcome";
                 _articleDecs = "Hello, Web!";
             } else if(mode === 'read'){
-                _articleTitle = "HTML";
-                _articleDecs = "HTML is ...";
+
+                var i = 0;
+                while(i < contents.length){
+                    if(selected_id === contents[i].id){
+                        _articleTitle = contents[i].title;
+                        _articleDecs = contents[i].desc;
+                        break;
+                    }
+                    i = i+1;
+                }
+
+            
             }
        
         
             document.querySelector('#app').innerHTML = (
                 headerTag('HTML', 'World wide web!') +
-                navTag +
+                navTag(contents) +
                 articleTag (_articleTitle, _articleDecs)
             );
         }
