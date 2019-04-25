@@ -1,0 +1,38 @@
+<html>
+    <body>
+        <script>
+            //함수
+            /*function Person(_name, _first, _second){
+                this.name = _name;
+                this.first = _first;
+                this.second = _second;
+                // this.sum = function(){
+                //     return this.first + this.second;
+                // }
+            }*/
+            // Person.prototype.sum(){
+            //     return this.first + this.second;
+            // }
+
+            //class
+            class Person{
+                constructor(_name, _first, _second){
+                    this.name = _name;
+                    this.first = _first;
+                    this.second = _second;
+                    // this.sum = function(){
+                    //     return this.first + this.second;
+                    // }
+                }
+                sum(){
+                    return this.first + this.second;
+                }
+            }
+
+            //new가 붙으면! -> 생성자 함수. p1 & p2는 객체!
+            var p1 = new Person('egoing', 10, 20);
+            var p2 = new Person('lee', 50, 50);
+            console.log(p1.sum(), p2.sum());    
+        </script>
+    </body>
+</html>
