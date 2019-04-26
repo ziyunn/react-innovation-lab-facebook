@@ -17,6 +17,26 @@ class Subject extends Component{
     );
   }
 }
+class Item extends Component{
+  render(){
+    return (
+      <li>
+        <a 
+          onClick={
+            function(event){
+              event.preventDefault();
+              this.props.onChangePage(this.props.id);
+            }.bind(this)
+          }
+          href={this.props.id+'.html'}>
+          {this.props.title}
+        </a>
+      </li>
+    );
+  }
+}
+
+
 class TOC extends Component{
   render(){
     var tags = [];
@@ -24,15 +44,25 @@ class TOC extends Component{
     var i = 0;
     while(i<con.length){
       tags.push(
-        <li key={con[i].id}>
-          <a href="/" 
-             onClick={function(event){
-                event.preventDefault();
-                this.props.onChangePage();
-             }.bind(this)}>
-            {con[i].title}
-          </a>
-        </li>
+        // <li key={con[i].id}>
+        //   <a href="/" 
+        //      onClick={function(id, event){
+        //         event.preventDefault();
+        //         this.props.onChangePage(id);
+        //      }.bind(this, con[i].id)}>
+        //     {con[i].title}
+        //   </a>
+        // </li>
+        <Item 
+          onChangePage={
+            function(id){
+              this.props.onChangePage(id);
+            }.bind(this)
+          }
+          key={con[i].id} 
+          id={con[i].id} 
+          title={con[i].title}>
+        </Item>
       );
       i = i + 1;
     }
@@ -59,9 +89,11 @@ class App extends Component{
   state = {
     contents : [
       {id:1, title: 'HTML', desc: 'HTML is ...'},
-      {id:2, title: 'CSS', desc: 'CSS is ...'}
+      {id:2, title: 'CSS', desc: 'CSS is ...'},
+      {id:3, title: 'JS', desc: 'JS is ...'}
     ],
-    mode: 'read'
+    mode:'read',
+    selected_id: 2
   }
   
   render(){
@@ -71,14 +103,27 @@ class App extends Component{
       _aDesc = 'Hello React!!';
 
     }else if(this.state.mode === 'read'){
-      _aTitle = this.state.contents[0].title;
-      _aDesc = this.state.contents[0].desc;
+      var i = 0;
+      var con = this.state.contents;
+      while(i < con.length){
+        if(con[i].id === this.state.selected_id){
+          _aTitle = con[i].title;
+          _aDesc = con[i].desc;
+          break;
+        }
+        i = i+1;
+      }
+      
     }
     return (
       <div className="App">
-        <Subject title="WEB" sub="World!" onChangePage={function(){
-          this.setState({mode:'welcome'});
-        }.bind(this)}></Subject>
+        <Subject 
+          title="WEB" 
+          sub="World!" 
+          onChangePage={function(){
+            this.setState({mode:'welcome'});
+          }.bind(this)}>
+        </Subject>
         {/* <header>
           <h1><a onClick={
             function(_event){
@@ -89,8 +134,8 @@ class App extends Component{
           World!  
         </header> */}
         <TOC onChangePage={
-          function(){
-            this.setState({mode:'read'});
+          function(id){
+            this.setState({mode:'read', selected_id:id});
           }.bind(this)
         } data={this.state.contents}></TOC>
         <Contents title={_aTitle} desc={_aDesc}></Contents>
@@ -100,3 +145,6 @@ class App extends Component{
 }
 
 export default App;
+
+
+
