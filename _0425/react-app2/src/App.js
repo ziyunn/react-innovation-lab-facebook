@@ -23,7 +23,17 @@ class TOC extends Component{
     var con = this.props.data;
     var i = 0;
     while(i<con.length){
-      tags.push(<li key={con[i].id}><a href="">{con[i].title}</a></li>);
+      tags.push(
+        <li key={con[i].id}>
+          <a href="/" 
+             onClick={function(event){
+                event.preventDefault();
+                this.props.onChangePage();
+             }.bind(this)}>
+            {con[i].title}
+          </a>
+        </li>
+      );
       i = i + 1;
     }
     return (
@@ -78,7 +88,11 @@ class App extends Component{
           } href="/">WEB</a></h1>
           World!  
         </header> */}
-        <TOC data={this.state.contents}></TOC>
+        <TOC onChangePage={
+          function(){
+            this.setState({mode:'read'});
+          }.bind(this)
+        } data={this.state.contents}></TOC>
         <Contents title={_aTitle} desc={_aDesc}></Contents>
       </div>
     );
