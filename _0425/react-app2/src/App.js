@@ -1,91 +1,12 @@
 import React, {Component} from 'react';
-
-class Subject extends Component{
-  render(){
-    
-    var clickEvent = function(_event){
-      _event.preventDefault();
-      this.props.onChangePage();
-    }.bind(this);
-
-    return (
-      <header>
-        <h1><a onClick={clickEvent} href="/">{this.props.title}</a></h1>
-        {this.props.sub}  
-      </header>
-
-    );
-  }
-}
-class Item extends Component{
-  render(){
-    return (
-      <li>
-        <a 
-          onClick={
-            function(event){
-              event.preventDefault();
-              this.props.onChangePage(this.props.id);
-            }.bind(this)
-          }
-          href={this.props.id+'.html'}>
-          {this.props.title}
-        </a>
-      </li>
-    );
-  }
-}
+import TOC from './components/TOC';
+import Subject from './components/Subject';
+import ContentCreate from './components/ContentCreate';
+import ContentRead from './components/ContentRead';
 
 
-class TOC extends Component{
-  render(){
-    var tags = [];
-    var con = this.props.data;
-    var i = 0;
-    while(i<con.length){
-      tags.push(
-        // <li key={con[i].id}>
-        //   <a href="/" 
-        //      onClick={function(id, event){
-        //         event.preventDefault();
-        //         this.props.onChangePage(id);
-        //      }.bind(this, con[i].id)}>
-        //     {con[i].title}
-        //   </a>
-        // </li>
-        <Item 
-          onChangePage={
-            function(id){
-              this.props.onChangePage(id);
-            }.bind(this)
-          }
-          key={con[i].id} 
-          id={con[i].id} 
-          title={con[i].title}>
-        </Item>
-      );
-      i = i + 1;
-    }
-    return (
-      <nav>
-        <ol>
-            {tags}
-        </ol>
-    </nav>
-    );
-  }
-}
-class Contents extends Component{
-  render(){
-    return (
-      <article>
-            <h2>{this.props.title}</h2>
-            {this.props.desc}  
-      </article>
-    );
-  }
-}
 class App extends Component{
+  
   state = {
     contents : [
       {id:1, title: 'HTML', desc: 'HTML is ...'},
@@ -97,10 +18,14 @@ class App extends Component{
   }
   
   render(){
+
+    var max_id = 3;
     var _aTitle, _aDesc = '';
+    var _content = null;
     if(this.state.mode === 'welcome'){
       _aTitle = 'Welcom';
       _aDesc = 'Hello React!!';
+      _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
 
     }else if(this.state.mode === 'read'){
       var i = 0;
@@ -113,7 +38,22 @@ class App extends Component{
         }
         i = i+1;
       }
-      
+      _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
+    }else if(this.state.mode === 'create'){
+      _content = <ContentCreate onSubmitCreate={
+        function(_title, _desc){
+          console.log(_title, _desc);
+          this.max_id = this.max_id +1; 
+          this.state.contents.push({
+            id:this.max_id,
+            title:_title,
+            desc :_desc
+          })
+          this.setState({contents:this.state.contents});
+        }.bind(this)
+      }></ContentCreate>
+    }else if(this.state.mode === 'update'){
+      _content = null;
     }
     return (
       <div className="App">
@@ -138,7 +78,17 @@ class App extends Component{
             this.setState({mode:'read', selected_id:id});
           }.bind(this)
         } data={this.state.contents}></TOC>
-        <Contents title={_aTitle} desc={_aDesc}></Contents>
+        <ul>
+          <li><a onClick={
+            function(event){
+              event.preventDefault();
+              this.setState({mode:'create'});
+            }.bind(this)
+          } href="/create">create</a></li>
+          <li><a href="/update">update</a></li>
+          <li><input type="button" value="delete"></input></li>
+        </ul>
+        {_content}
       </div>
     );
   }
