@@ -13,8 +13,8 @@
 의 효과를 기대해 볼 수 있어짐
 
 ### 결과페이지
-<img src="https://user-images.githubusercontent.com/18348345/57073620-8dfa1700-6d1c-11e9-9f02-cbb9a69160d5.png
-" width="50%"></img>
+<img src="https://user-images.githubusercontent.com/18348345/57073620-8dfa1700-6d1c-11e9-9f02-cbb9a69160d5.png" width="50%"></img>
+
 
 ***
 ## React 환경 셋팅
