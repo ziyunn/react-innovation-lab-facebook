@@ -45,7 +45,6 @@ class App extends Component{
     }else if(this.state.mode === 'create'){
       _content = <ContentCreate onSubmitCreate={
         function(_title, _desc){
-          console.log(_title, _desc);
           this.max_id = this.max_id +1; 
           //.concat 개념 이해하기!
           var _contents = this.state.contents.concat({
@@ -53,7 +52,10 @@ class App extends Component{
             title:_title,
             desc :_desc
           })
-          this.setState({contents:_contents});
+          this.setState({
+            contents:_contents,
+            mode:'read'   
+          });
         }.bind(this)
       }></ContentCreate>
     }else if(this.state.mode === 'update'){
@@ -78,8 +80,6 @@ class App extends Component{
     }
     return _content;
   }
-
-
   render(){
     return (
       <div className="App">
@@ -97,7 +97,26 @@ class App extends Component{
         } data={this.state.contents}></TOC>
         <Control onChangeMode={
             function(_mode){
-              this.setState({mode:_mode});
+              if(_mode === 'delete'){
+                if(window.confirm('정말 삭제 하시겠습니까?')){
+                  var _contents = Array.from(this.state.contents);
+                  var i = 0;
+                  while(i < _contents.length){
+                    if(_contents[i].id === this.state.selected_id){
+                      _contents.splice(i,1);
+                      break;
+                    }
+                    i = i + 1;
+                  }
+                  this.setState({
+                    mode:'welcome',
+                    contents:_contents
+                  });
+                  alert('삭제되었습니다.');
+                }
+              }else{
+                this.setState({mode:_mode});
+              }
             }.bind(this)
         }></Control>
         {this.getContent()}

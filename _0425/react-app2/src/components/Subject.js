@@ -6,7 +6,6 @@ class Subject extends Component{
     }
     
     render(){
-      
       var clickEvent = function(_event){
         _event.preventDefault();
         this.props.onChangePage();
