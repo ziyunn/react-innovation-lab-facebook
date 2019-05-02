@@ -19,9 +19,17 @@ class Item extends Component{
     }
   }
   
-  
   class TOC extends Component{
+    shouldComponentUpdate(newProps, newState){
+      // console.log('shouldComponentUpdate TOC render ');
+      if(this.props.data === newProps.data){
+        return false;
+      }
+      return true;
+    }
+    
     render(){
+      // console.log('TOC render');
       var tags = [];
       var con = this.props.data;
       var i = 0;

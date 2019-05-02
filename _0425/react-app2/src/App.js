@@ -3,6 +3,7 @@ import TOC from './components/TOC';
 import Subject from './components/Subject';
 import ContentCreate from './components/ContentCreate';
 import ContentRead from './components/ContentRead';
+import Control from './components/Control';
 
 
 class App extends Component{
@@ -16,10 +17,9 @@ class App extends Component{
     mode:'read',
     selected_id: 2
   }
+  max_id = this.state.contents.length;
   
   render(){
-
-    var max_id = 3;
     var _aTitle, _aDesc = '';
     var _content = null;
     if(this.state.mode === 'welcome'){
@@ -44,12 +44,13 @@ class App extends Component{
         function(_title, _desc){
           console.log(_title, _desc);
           this.max_id = this.max_id +1; 
-          this.state.contents.push({
+          //.concat 개념 이해하기!
+          var _contents = this.state.contents.concat({
             id:this.max_id,
             title:_title,
             desc :_desc
           })
-          this.setState({contents:this.state.contents});
+          this.setState({contents:_contents});
         }.bind(this)
       }></ContentCreate>
     }else if(this.state.mode === 'update'){
@@ -64,30 +65,16 @@ class App extends Component{
             this.setState({mode:'welcome'});
           }.bind(this)}>
         </Subject>
-        {/* <header>
-          <h1><a onClick={
-            function(_event){
-              this.setState({mode:'welcome'});
-              _event.preventDefault();
-            }.bind(this)
-          } href="/">WEB</a></h1>
-          World!  
-        </header> */}
         <TOC onChangePage={
           function(id){
             this.setState({mode:'read', selected_id:id});
           }.bind(this)
         } data={this.state.contents}></TOC>
-        <ul>
-          <li><a onClick={
-            function(event){
-              event.preventDefault();
-              this.setState({mode:'create'});
+        <Control onChangeMode={
+            function(_mode){
+              this.setState({mode:_mode});
             }.bind(this)
-          } href="/create">create</a></li>
-          <li><a href="/update">update</a></li>
-          <li><input type="button" value="delete"></input></li>
-        </ul>
+        }></Control>
         {_content}
       </div>
     );
