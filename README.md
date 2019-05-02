@@ -8,12 +8,16 @@
   - Javascript를 모른 채 개발한 습관으로 기본기가 흔들리기 시작함
   - React의 개인적으로 하는 공부가 한 곳에 머물러 있는 느낌이 있어서, '왜 React를 써야하는가'를 정리하기 위해 
   - 앞으로 업무에서 React 프로젝트에 참여하고 싶어서
-2. 결론 
+2. 결론
+- Javascript 객체란 무엇인가?
+- 객체지향 프로그래밍
 - React의 Component를 이용해서, 
   - 가독성 좋아짐 
   - 재 사용성 높아짐 
   - 유지보수 수월해짐 
 의 효과를 기대해 볼 수 있어짐
+- Props 와 State
+- 컴포넌트 성능 최적화
 
 ***
 ## React 환경 셋팅
@@ -30,4 +34,8 @@ cd my-app<br>
 npm start<br>
 
 ## Immutable
+- 불변한
+- 원본을 바꾸지 않는
+- 성능 튜닝
+
 [Immutable-js](https://github.com/immutable-js/immutable-js)
