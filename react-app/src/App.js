@@ -6,17 +6,15 @@ import ContentUpdate from './components/ContentUpdate';
 import ContentRead from './components/ContentRead';
 import Control from './components/Control';
 
-
 class App extends Component{
-  
   state = {
     contents : [
       {id:1, title: 'HTML', desc: 'HTML is ...'},
       {id:2, title: 'CSS', desc: 'CSS is ...'},
       {id:3, title: 'JS', desc: 'JS is ...'}
     ],
-    mode:'read',
-    selected_id: 2
+    mode:'welcome',
+    selected_id: null
   }
   max_id = this.state.contents.length;
   
@@ -31,6 +29,7 @@ class App extends Component{
       i = i+1;
     }
   }
+
   getContent(){
     var _aTitle, _aDesc, _data = '';
     var _content = null;
@@ -38,7 +37,6 @@ class App extends Component{
       _aTitle = 'Welcom';
       _aDesc = 'Hello React!!';
       _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
-
     }else if(this.state.mode === 'read'){
       _data = this.getReadContent();
       _content = <ContentRead title={_data.title} desc={_data.desc}></ContentRead>
@@ -46,15 +44,12 @@ class App extends Component{
       _content = <ContentCreate onSubmitCreate={
         function(_title, _desc){
           this.max_id = this.max_id +1; 
-          //.concat 개념 이해하기!
-          var _contents = this.state.contents.concat({
-            id:this.max_id,
-            title:_title,
-            desc :_desc
-          })
+          var _contents = Array.from(this.state.contents);
+          _contents.push({id:this.max_id, title:_title, desc:_desc});
           this.setState({
             contents:_contents,
-            mode:'read'   
+            mode:'read',
+            selected_id :this.max_id   
           });
         }.bind(this)
       }></ContentCreate>
