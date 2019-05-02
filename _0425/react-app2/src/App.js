@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import TOC from './components/TOC';
 import Subject from './components/Subject';
 import ContentCreate from './components/ContentCreate';
+import ContentUpdate from './components/ContentUpdate';
 import ContentRead from './components/ContentRead';
 import Control from './components/Control';
 
@@ -19,8 +20,19 @@ class App extends Component{
   }
   max_id = this.state.contents.length;
   
-  render(){
-    var _aTitle, _aDesc = '';
+  getReadContent(){
+    var i = 0;
+    var con = '';
+    while(i < this.state.contents.length){
+      con = this.state.contents[i];
+      if(con.id === this.state.selected_id){
+        return con;
+      }
+      i = i+1;
+    }
+  }
+  getContent(){
+    var _aTitle, _aDesc, _data = '';
     var _content = null;
     if(this.state.mode === 'welcome'){
       _aTitle = 'Welcom';
@@ -28,17 +40,8 @@ class App extends Component{
       _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
 
     }else if(this.state.mode === 'read'){
-      var i = 0;
-      var con = this.state.contents;
-      while(i < con.length){
-        if(con[i].id === this.state.selected_id){
-          _aTitle = con[i].title;
-          _aDesc = con[i].desc;
-          break;
-        }
-        i = i+1;
-      }
-      _content = <ContentRead title={_aTitle} desc={_aDesc}></ContentRead>
+      _data = this.getReadContent();
+      _content = <ContentRead title={_data.title} desc={_data.desc}></ContentRead>
     }else if(this.state.mode === 'create'){
       _content = <ContentCreate onSubmitCreate={
         function(_title, _desc){
@@ -54,8 +57,30 @@ class App extends Component{
         }.bind(this)
       }></ContentCreate>
     }else if(this.state.mode === 'update'){
-      _content = null;
+      _data = this.getReadContent(); 
+      _content =  <ContentUpdate data={_data} onSubmitUpdate={
+        function(_id, _title, _desc){ 
+          var _contents = Array.from(this.state.contents);
+          var i = 0;
+          while(i < _contents.length){
+            if(_contents[i].id === _id){
+              _contents[i] = {id:_id, title:_title, desc:_desc};
+              break;
+            }
+            i =  i+1;
+          }
+          this.setState({
+            contents:_contents,
+            mode:'read'
+          });
+        }.bind(this)
+      }></ContentUpdate>
     }
+    return _content;
+  }
+
+
+  render(){
     return (
       <div className="App">
         <Subject 
@@ -75,7 +100,7 @@ class App extends Component{
               this.setState({mode:_mode});
             }.bind(this)
         }></Control>
-        {_content}
+        {this.getContent()}
       </div>
     );
   }
